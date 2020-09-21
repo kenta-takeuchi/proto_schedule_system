@@ -1,7 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomePage from './pages/SearchPatientPage'
+
+import CreateFimPage from './pages/CreateFimPage'
+import FimsPage from './pages/FimsPage'
 import LoginPage from './pages/LoginPage'
+import PatientsPage from './pages/PatientsPage'
+import ShiftTablePage from './pages/ShiftTablePage'
+import StaffPage from './pages/StaffPage'
+
+
 import store from './store'
 
 
@@ -11,9 +18,13 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        {path: '/', component: HomePage, meta: {requiresAuth: true}},
         {path: '/login', component: LoginPage},
-        {path: '*', redirect: '/'},
+        {path: '/create/fim', name: 'fims', component: FimsPage, meta: {requiresAuth: true}},
+        {path: '/create/fim', name: 'createFim', component: CreateFimPage, meta: {requiresAuth: true}},
+        {path: '/patients', name: 'patients', component: PatientsPage, props: true , meta: {requiresAuth: true}},
+        {path: '/shift/show', name: 'shiftTable', component: ShiftTablePage, meta: {requiresAuth: true}},
+        {path: '/staff', name: 'staff', component: StaffPage, meta: {requiresAuth: true}},
+        {path: '*', redirect: '/patients'},
     ]
 });
 

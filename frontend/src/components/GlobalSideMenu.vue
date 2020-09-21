@@ -1,6 +1,6 @@
 <template>
     <el-aside width="200px">
-        <el-menu :default-openeds="['1', '2', '3']">
+        <el-menu :default-openeds="['1', '2', '3']" router>
             <template v-if="!isLoggedIn">
                 <el-submenu index="1">
                     <template slot="title"><i class="el-icon-user"></i>ユーザー管理</template>
@@ -12,15 +12,14 @@
             <template v-else>
                 <el-submenu index="1">
                     <template slot="title"><i class="el-icon-menu"></i>業務メニュー</template>
-                    <el-menu-item index="1-1">患者検索</el-menu-item>
-                    <el-menu-item index="1-2">実施記録</el-menu-item>
-                    <el-menu-item index="1-3">FIM評価</el-menu-item>
+                    <el-menu-item index="patients" :route="{name:'patients'}">患者一覧</el-menu-item>
+                    <el-menu-item index="fims" :route="{name:'fims'}">FIM評価一覧</el-menu-item>
                 </el-submenu>
                 <el-submenu index="2">
                     <template slot="title"><i class="el-icon-s-custom"></i>管理者メニュー</template>
-                    <el-menu-item index="2-1">チーム管理</el-menu-item>
-                    <el-menu-item index="2-2">シフト管理</el-menu-item>
-                    <el-menu-item index="2-3">リハビリ管理</el-menu-item>
+                    <el-menu-item index="staff" :route="{name:'staff'}">スタッフ一覧</el-menu-item>
+                    <el-menu-item index="shiftTable" :route="{name:'shiftTable'}">シフト表</el-menu-item>
+                    <el-menu-item index="2-3">リハビリ表管理</el-menu-item>
                 </el-submenu>
                 <el-submenu index="3">
                     <template slot="title"><i class="el-icon-s-data"></i>統計メニュー</template>
@@ -31,7 +30,7 @@
                     <template slot="title"><i class="el-icon-user-solid"></i>ユーザー管理</template>
                     <el-menu-item-group>
                         <el-menu-item index="4-1">アカウント情報</el-menu-item>
-                        <el-menu-item index="4-2" @click="clickLogin">ログアウト</el-menu-item>
+                        <el-menu-item index="4-2" @click="clickLogout">ログアウト</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
             </template>
@@ -63,10 +62,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .el-aside {
-        color: #333;
-        min-height: 100vh;
-    }
-</style>

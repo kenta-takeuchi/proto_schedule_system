@@ -46,7 +46,6 @@
                         const next = this.$route.query.next || '/';
                         this.$router.replace(next);
                     });
-
             }
         }
     }
