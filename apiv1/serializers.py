@@ -54,30 +54,30 @@ class StaffWithShiftScheduleSerializer(serializers.ModelSerializer):
         return shift_schedule_with_staff
 
 
-class PatientSerializer(serializers.ModelSerializer):
-    responsible_staff_id = StaffSerializer()
-
-    class Meta:
-        model = Patient
-        fields = '__all__'
-
-
-class FimSerializer(serializers.ModelSerializer):
-    patient_id = PatientSerializer(read_only=True)
-    patient_uid = serializers.PrimaryKeyRelatedField(queryset=Patient.objects.all(), write_only=True)
-
+class BaseFimSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fim
         fields = '__all__'
 
+
+class PatientSerializer(serializers.ModelSerializer):
+    responsible_staff_id = StaffSerializer()
+    fim_patient_id = BaseFimSerializer(many=True)
+
+    class Meta:
+        model = Patient
+        fields = ['id', 'name', 'responsible_staff_id', 'fim_patient_id']
+
+
+class FimSerializer(BaseFimSerializer):
+    patient_id = PatientSerializer(read_only=True)
+    patient_uid = serializers.PrimaryKeyRelatedField(queryset=Patient.objects.all(), write_only=True)
+
     def create(self, validated_date):
         validated_date['patient_id'] = validated_date.get('patient_uid', None)
-
         if validated_date['patient_id'] is None:
             raise serializers.ValidationError("Patient not found.")
-
         del validated_date['patient_uid']
-
         return Fim.objects.create(**validated_date)
 
 

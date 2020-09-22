@@ -17,9 +17,9 @@ class ShiftService(object):
         self.month_days = month_days
 
         # コマの定義
-        self.shift_box = [i for i in range(len(self.staff))]
+        self.shift_box = [i for i in range(self.month_days)]
         # 各コマの想定人数
-        self.need_staff = [4 for _ in range(len(self.staff))]
+        self.need_staff = [4 for _ in range(self.month_days)]
 
     def save_schedule(self):
         for best_shifts, staff in zip(self.slice(), self.staff):
@@ -86,18 +86,15 @@ class ShiftService(object):
     # 想定人数と実際の人数の差分を取得する
     def abs_people_between_need_and_actual(self):
         result = []
-        index = 0
-        for need in self.need_staff:
+        for index, need in enumerate(self.need_staff):
             actual = len(self.get_user_nos_by_box_index(index))
             result.append(abs(need - actual))
-            index += 1
         return result
 
     def few_work_pt(self, lowest_number_of_pt):
         """"""
         result = []
         for box_name in self.shift_box:
-            manager_included = False
             user_nos = self.get_user_nos_by_box_name(box_name)
             count_pt = 0
             for user_no in user_nos:

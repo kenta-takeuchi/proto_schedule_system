@@ -75,7 +75,6 @@
 
                     return [year, month, day].join('-');
                 }
-
             }
         },
     }

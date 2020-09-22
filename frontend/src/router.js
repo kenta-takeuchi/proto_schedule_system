@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import CreateFimPage from './pages/CreateFimPage'
 import FimsPage from './pages/FimsPage'
 import LoginPage from './pages/LoginPage'
+import PatientDetailPage from './pages/PatientDetailPage'
 import PatientsPage from './pages/PatientsPage'
 import ShiftTablePage from './pages/ShiftTablePage'
 import StaffPage from './pages/StaffPage'
@@ -22,6 +23,7 @@ const router = new VueRouter({
         {path: '/create/fim', name: 'fims', component: FimsPage, meta: {requiresAuth: true}},
         {path: '/create/fim', name: 'createFim', component: CreateFimPage, meta: {requiresAuth: true}},
         {path: '/patients', name: 'patients', component: PatientsPage, props: true , meta: {requiresAuth: true}},
+        {path: '/patient/detail', name: 'patientDetail', component: PatientDetailPage, props: true , meta: {requiresAuth: true}},
         {path: '/shift/show', name: 'shiftTable', component: ShiftTablePage, meta: {requiresAuth: true}},
         {path: '/staff', name: 'staff', component: StaffPage, meta: {requiresAuth: true}},
         {path: '*', redirect: '/patients'},

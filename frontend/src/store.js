@@ -55,25 +55,31 @@ const messageModule = {
     strict: process.env.NODE_ENV !== 'production',
     namespaced: true,
     state: {
-        patientName: '',
-        results: [],
+        info: '',
+        warnings: [],
+        error: ''
     },
     getters: {
-        patientName: state => state.patientName,
-        results: state => state.results,
+        info: state => state.info,
+        warnings: state => state.warnings,
+        error: state => state.error
     },
     mutations: {
         set(state, payload) {
-            if (payload.patientName) {
-                state.patientName = payload.patientName;
+            if (payload.info) {
+                state.info = payload.info;
             }
-            if (payload.results) {
-                state.results = payload.results;
+            if (payload.warnings) {
+                state.warnings = payload.warnings;
+            }
+            if (payload.error) {
+                state.error = payload.error;
             }
         },
         clear(state) {
-            state.patientName = '';
-            state.results = [];
+            state.info = '';
+            state.warnings = [];
+            state.error = [];
         }
     },
     actions: {
@@ -102,6 +108,5 @@ const store = new Vuex.Store({
         message: messageModule,
     }
 });
-
 
 export default store

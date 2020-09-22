@@ -30,7 +30,7 @@ class ScheduleService(object):
         people_count_sub_sum = sum(s.abs_people_between_need_and_actual()) / self.month_days * len(self.staff)
 
         # 理学療法士のアサイン数が最低人数以下
-        few_work_pt = sum(s.few_work_pt(2)) / self.month_days
+        few_work_pt = sum(s.few_work_pt(3)) / self.month_days
         return people_count_sub_sum, few_work_pt
 
     def setting_toolbox(self):
@@ -49,8 +49,8 @@ class ScheduleService(object):
         self.setting_toolbox()
 
         # 初期集団を生成する
-        pop = self.toolbox.population(n=300)
-        CXPB, MUTPB, NGEN = 0.6, 0.3, 500  # 交差確率、突然変異確率、進化計算のループ回数
+        pop = self.toolbox.population(n=100)
+        CXPB, MUTPB, NGEN = 0.6, 0.4, 300  # 交差確率、突然変異確率、進化計算のループ回数
 
         print("進化開始")
 

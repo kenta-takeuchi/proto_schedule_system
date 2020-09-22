@@ -35,6 +35,7 @@
         },
         methods: {
             submitLogin: function () {
+                console.log(this.form)
                 this.$store.dispatch('auth/login', {
                     username: this.form.username,
                     password: this.form.password
