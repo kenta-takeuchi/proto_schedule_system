@@ -9,14 +9,13 @@
                     label="患者氏名">
             </el-table-column>
             <el-table-column
-                    prop="responsible_staff_id.name"
-                    label="担当スタッフ">
-            </el-table-column>
-            <el-table-column
                     prop="responsible_staff_id.team_id.name"
                     label="担当チーム">
             </el-table-column>
-
+            <el-table-column
+                    prop="responsible_staff_id.name"
+                    label="担当スタッフ">
+            </el-table-column>
             <el-table-column label="FIM評価">
                 <template scope="scope">
                     <el-button type="submit" @click="moveToCreateFimPage(scope.row)" size="small">記録</el-button>
@@ -46,16 +45,16 @@
             })
         },
         methods: {
-            moveToCreateFimPage(currentPatinet) {
-                console.log(currentPatinet)
+            moveToCreateFimPage(currentPatient) {
+                console.log(currentPatient)
                 this.$router.push({
                     name: 'createFim',
                     params: {
-                        patientName: currentPatinet.name,
-                        patientId: currentPatinet.id
+                        patientName: currentPatient.name,
+                        patientId: currentPatient.id
                     }
                 });
-            }
+            },
         }
     }
 </script>

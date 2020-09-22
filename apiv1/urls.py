@@ -19,5 +19,6 @@ router.register('shift_schedules', views.ShiftScheduleViewSet)
 app_name = 'schedule'
 urlpatterns = [
     path('', include(router.urls)),
-    path('detail_articles/', views.StaffWithShiftScheduleSerializer.as_view())
+    path('detail_articles/', views.StaffWithShiftScheduleSerializer.as_view()),
+    path('test/', views.results),
 ]
