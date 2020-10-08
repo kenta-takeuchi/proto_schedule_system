@@ -67,11 +67,12 @@ class Fim(BaseClass):
 class AvoidTime(BaseClass):
     patient_id = models.ForeignKey(Patient, related_name='avoid_patient_id', on_delete=models.CASCADE)
     avoid_reason = models.CharField(max_length=50)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    date = models.DateField(default=timezone.now())
+    start_time = models.TimeField()
+    end_time = models.TimeField()
 
     def __str__(self):
-        return f'{self.patient_id.name} {self.start_time} - {self.end_time} {self.avoid_reason}'
+        return f'{self.patient_id.name} {self.date} {self.avoid_reason}'
 
 
 class ApplyTime(BaseClass):

@@ -19,7 +19,6 @@ class BaseScheduleViewSet(viewsets.ModelViewSet):
 
 class TeamViewSet(BaseScheduleViewSet):
     """チームのCRUD用汎用API"""
-
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 

@@ -6,6 +6,7 @@
         border
         :summary-method="getSummaries"
         show-summary
+        v-loading="loading"
     >
       <el-table-column
           prop="team_id.name"
@@ -44,6 +45,7 @@ export default {
       staff: [],
       days: [],
       sums: [],
+      loading: false
     }
   },
   mounted() {
@@ -74,6 +76,7 @@ export default {
   },
   methods: {
     setShiftSchedule() {
+      this.loading = true
       api.get('/get_shift_schedule/')
           .then(response => {
             this.staff = response.data;
@@ -107,6 +110,7 @@ export default {
             });
           })
       const today = new Date();
+      this.loading = false
       this.days = getMonthInfo(today.getFullYear(), today.getMonth());
     },
     getSummaries(param) {

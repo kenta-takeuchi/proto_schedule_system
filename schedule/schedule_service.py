@@ -13,7 +13,7 @@ class ScheduleService(object):
         self.staff = Staff.objects.all().select_related()
         self.month_days = month_days
 
-        creator.create("FitnessPeopleCount", base.Fitness, weights=(-100.0, -10.0))
+        creator.create("FitnessPeopleCount", base.Fitness, weights=(-50.0, -30.0, 20.0, -500.0))
         creator.create("Individual", list, fitness=creator.FitnessPeopleCount)
 
         self.toolbox = base.Toolbox()
@@ -29,9 +29,16 @@ class ScheduleService(object):
         # 想定人数とアサイン人数の差
         people_count_sub_sum = sum(s.abs_people_between_need_and_actual()) / self.month_days * len(self.staff)
 
-        # 理学療法士のアサイン数が最低人数以下
-        few_work_pt = sum(s.few_work_pt(3)) / self.month_days
-        return people_count_sub_sum, few_work_pt
+        # 4連勤を超えるスタッフがいるかどうか
+        over_non_stop_work = sum(s.over_non_stop_work(4)) / self.month_days * len(self.staff)
+
+        # 3連休までだと加点
+        less_day_off = s.less_day_off(2)
+
+        # 月間の出勤数のカウント
+        people_count_work = sum(s.abs_work_time_between_need_and_actual()) / self.month_days
+
+        return people_count_sub_sum, over_non_stop_work, less_day_off, people_count_work
 
     def setting_toolbox(self):
         # 適応度計算
@@ -49,8 +56,8 @@ class ScheduleService(object):
         self.setting_toolbox()
 
         # 初期集団を生成する
-        pop = self.toolbox.population(n=100)
-        CXPB, MUTPB, NGEN = 0.6, 0.4, 300  # 交差確率、突然変異確率、進化計算のループ回数
+        pop = self.toolbox.population(n=200)
+        CXPB, MUTPB, NGEN = 0.5, 0.2, 300  # 交差確率、突然変異確率、進化計算のループ回数
 
         print("進化開始")
 

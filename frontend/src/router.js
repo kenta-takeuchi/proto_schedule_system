@@ -6,9 +6,9 @@ import FimsPage from './pages/FimsPage'
 import LoginPage from './pages/LoginPage'
 import PatientDetailPage from './pages/PatientDetailPage'
 import PatientsPage from './pages/PatientsPage'
+import PatientsScheduleManagementPage from './pages/PatientsScheduleManagementPage'
 import ShiftTablePage from './pages/ShiftTablePage'
 import StaffPage from './pages/StaffPage'
-
 
 import store from './store'
 
@@ -22,8 +22,20 @@ const router = new VueRouter({
         {path: '/login', component: LoginPage},
         {path: '/create/fim', name: 'fims', component: FimsPage, meta: {requiresAuth: true}},
         {path: '/create/fim', name: 'createFim', component: CreateFimPage, meta: {requiresAuth: true}},
-        {path: '/patients', name: 'patients', component: PatientsPage, props: true , meta: {requiresAuth: true}},
-        {path: '/patient/detail', name: 'patientDetail', component: PatientDetailPage, props: true , meta: {requiresAuth: true}},
+        {path: '/patients', name: 'patients', component: PatientsPage, props: true, meta: {requiresAuth: true}},
+        {
+            path: '/patients/schedule/management',
+            name: 'patientsScheduleManagementPage',
+            component: PatientsScheduleManagementPage,
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/patient/detail',
+            name: 'patientDetail',
+            component: PatientDetailPage,
+            props: true,
+            meta: {requiresAuth: true}
+        },
         {path: '/shift/show', name: 'shiftTable', component: ShiftTablePage, meta: {requiresAuth: true}},
         {path: '/staff', name: 'staff', component: StaffPage, meta: {requiresAuth: true}},
         {path: '*', redirect: '/patients'},
@@ -37,7 +49,6 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (isLoggedIn) {
-            console.log('ログインが必要なページ')
             next();
         } else {
             if (token != null) {

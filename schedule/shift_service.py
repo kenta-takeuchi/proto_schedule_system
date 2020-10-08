@@ -1,5 +1,6 @@
 import datetime as dt
 import random
+import re
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -36,7 +37,7 @@ class ShiftService(object):
     # ランダムなデータを生成
     def make_sample(self):
         sample_list = []
-        for num in range(len(self.staff)*len(self.month_days)):
+        for num in range(len(self.staff) * len(self.month_days)):
             sample_list.append(random.randint(0, 1))
         self.individual = tuple(sample_list)
 
@@ -66,7 +67,7 @@ class ShiftService(object):
     # CSV形式でアサイン結果の出力をする
     def print_csv(self):
         for line in self.slice():
-            print(','.join(map(str, line)))
+            print(','.join(map(str, line))+','+str(sum(line)))
 
     # コマ番号を指定してアサインされているスタッフ番号リストを取得する
     def get_user_nos_by_box_index(self, box_index):
@@ -105,3 +106,42 @@ class ShiftService(object):
                 result.append(box_name)
         return result
 
+    def get_max_shift_type(self, shift_schedule, shift_type=1):
+        def judge(shift_type):
+            if shift_type == 0:
+                return shift_type > 0
+            else:
+                return shift_type < 0
+
+        step = 1
+        tmp_list = [0 for _ in range(len(shift_schedule))]
+        for i, shift_type in enumerate(shift_schedule):
+            if judge(shift_type):
+                tmp_list[i] += step
+                step += 1
+            else:
+                step = 1
+        return max(tmp_list)
+
+    def over_non_stop_work(self, max_non_stop_work_number):
+        result = []
+        for staff in self.slice():
+            staff_map = map(str, staff)
+            for shift in re.split('[0]+', ''.join(staff_map)):
+                result.append(abs(max_non_stop_work_number - len(shift)))
+        return result
+
+    def less_day_off(self, less_day_off_number):
+        count = 0
+        for staff in self.slice():
+            if self.get_max_shift_type(list(staff), 0) <= less_day_off_number:
+                count += 1
+        return count
+
+    def abs_work_time_between_need_and_actual(self):
+        result = []
+        need = self.month_days * 4 // 6
+        for staff in self.slice():
+            actual = staff.count(1)
+            result.append(abs(need - actual))
+        return result

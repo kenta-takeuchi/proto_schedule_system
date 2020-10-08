@@ -60,13 +60,20 @@ class BaseFimSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class BaseAvoidTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvoidTime
+        fields = '__all__'
+
+
 class PatientSerializer(serializers.ModelSerializer):
     responsible_staff_id = StaffSerializer()
     fim_patient_id = BaseFimSerializer(many=True)
+    avoid_patient_id = BaseAvoidTimeSerializer(many=True)
 
     class Meta:
         model = Patient
-        fields = ['id', 'name', 'responsible_staff_id', 'fim_patient_id']
+        fields = ['id', 'name', 'responsible_staff_id', 'fim_patient_id', 'avoid_patient_id']
 
 
 class FimSerializer(BaseFimSerializer):
@@ -81,22 +88,15 @@ class FimSerializer(BaseFimSerializer):
         return Fim.objects.create(**validated_date)
 
 
-class AvoidTimeSerializer(serializers.ModelSerializer):
+class AvoidTimeSerializer(BaseAvoidTimeSerializer):
     patient_id = PatientSerializer(read_only=True)
     patient_uid = serializers.PrimaryKeyRelatedField(queryset=Patient.objects.all(), write_only=True)
 
-    class Meta:
-        model = AvoidTime
-        fields = '__all__'
-
     def create(self, validated_date):
         validated_date['patient_id'] = validated_date.get('patient_uid', None)
-
         if validated_date['patient_id'] is None:
             raise serializers.ValidationError("Patient not found.")
-
         del validated_date['patient_uid']
-
         return AvoidTime.objects.create(**validated_date)
 
 
